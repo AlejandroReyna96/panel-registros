@@ -1,0 +1,59 @@
+<div class="max-w-2xl mx-auto space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      {{ isEdit() ? 'Editar Proceso' : 'Nuevo Proceso' }}
+    </h1>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white rounded shadow p-6 space-y-4">
+
+    <!-- Nombre -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Nombre
+      </label>
+      <input
+        type="text"
+        [(ngModel)]="model().cNombre"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+        required
+      />
+    </div>
+
+    <!-- Descripción -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Descripción
+      </label>
+      <textarea
+        rows="3"
+        [(ngModel)]="model().cDescripcion"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+      ></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end gap-2 pt-4">
+      <button
+        (click)="cancelar()"
+        class="px-4 py-2 rounded border text-gray-600 hover:bg-gray-100"
+        type="button"
+      >
+        Cancelar
+      </button>
+
+      <button
+        (click)="guardar()"
+        [disabled]="loading() || !model().cNombre"
+        class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+        type="button"
+      >
+        {{ isEdit() ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+
+  </div>
+</div>

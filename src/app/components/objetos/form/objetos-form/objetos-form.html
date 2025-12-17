@@ -1,0 +1,120 @@
+<div class="max-w-3xl mx-auto space-y-4">
+
+  <h1 class="text-xl font-semibold">
+    {{ esEdicion() ? 'Editar objeto' : 'Nuevo objeto' }}
+  </h1>
+
+  <form [formGroup]="form" class="space-y-4">
+
+    <!-- Nombre interno -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Nombre interno
+      </label>
+      <input
+        formControlName="cNombreCampo"
+        class="w-full border rounded px-3 py-2"
+        placeholder="CURP, RFC, CORREO"
+      />
+    </div>
+
+    <!-- Etiqueta -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Etiqueta sugerida
+      </label>
+      <input
+        formControlName="cEtiquetaDefault"
+        class="w-full border rounded px-3 py-2"
+        placeholder="Clave Única de Registro de Población"
+      />
+    </div>
+
+    <!-- Tipo de dato -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Tipo de dato
+      </label>
+      <select
+        formControlName="cTipoDato"
+        class="w-full border rounded px-3 py-2"
+      >
+        <option value="">Seleccione…</option>
+        <option value="text">Texto</option>
+        <option value="number">Número</option>
+        <option value="email">Correo</option>
+        <option value="file">Archivo</option>
+        <option value="select">Lista</option>
+        <option value="date">Fecha</option>
+      </select>
+    </div>
+
+    <!-- Longitud máxima -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Longitud máxima
+      </label>
+      <input
+        type="number"
+        formControlName="iLongitudMax"
+        class="w-full border rounded px-3 py-2"
+      />
+    </div>
+
+    <!-- Regex -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Regex de validación
+      </label>
+      <input
+        formControlName="cRegexValidacion"
+        class="w-full border rounded px-3 py-2"
+        placeholder="^[A-Z]{4}[0-9]{6}[A-Z0-9]{8}$"
+      />
+    </div>
+
+    <!-- MIME -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        MIME permitidos
+      </label>
+      <input
+        formControlName="cMimePermitidos"
+        class="w-full border rounded px-3 py-2"
+        placeholder="application/pdf,image/jpeg"
+      />
+    </div>
+
+    <!-- Peso -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Peso máximo (KB)
+      </label>
+      <input
+        type="number"
+        formControlName="iPesoMaxKB"
+        class="w-full border rounded px-3 py-2"
+      />
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="flex gap-3 pt-4">
+      <button
+        type="button"
+        (click)="guardar()"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Guardar
+      </button>
+
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+      >
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</div>

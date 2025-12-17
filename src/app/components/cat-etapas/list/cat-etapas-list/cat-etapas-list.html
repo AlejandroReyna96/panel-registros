@@ -1,0 +1,90 @@
+<div class="max-w-6xl mx-auto space-y-6">
+
+  <!-- ================= HEADER ================= -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">
+        Catálogo de Etapas
+      </h1>
+      <p class="text-sm text-gray-500">
+        Etapas disponibles para construir flujos de procesos
+      </p>
+    </div>
+
+    <button
+      (click)="nuevo()"
+      class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm transition"
+    >
+      <span class="text-lg">＋</span>
+      Nueva etapa
+    </button>
+  </div>
+
+  <!-- ================= CONTENT ================= -->
+  @if (loading()) {
+    <div class="text-center text-gray-500 py-10">
+      Cargando etapas...
+    </div>
+  } @else {
+
+    @if (estados().length === 0) {
+      <div class="text-center text-gray-500 py-12 italic">
+        No hay etapas registradas.
+      </div>
+    } @else {
+
+      <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+
+        <table class="w-full text-sm text-left">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr>
+              <th class="px-5 py-3 w-1/4">Nombre</th>
+              <th class="px-5 py-3">Descripción</th>
+              <th class="px-5 py-3 text-right w-40">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (e of estados(); track e.iId) {
+              <tr class="border-t hover:bg-gray-50 transition">
+
+                <!-- NOMBRE -->
+                <td class="px-5 py-3 font-medium text-gray-800">
+                  {{ e.cNombre }}
+                </td>
+
+                <!-- DESCRIPCIÓN -->
+                <td class="px-5 py-3 text-gray-600">
+                  {{ e.cDescripcion || '—' }}
+                </td>
+
+                <!-- ACCIONES -->
+                <td class="px-5 py-3">
+                  <div class="flex justify-end gap-2">
+
+                    <button
+                      (click)="editar(e.iId)"
+                      class="px-3 py-1.5 text-sm rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
+                    >
+                      Editar
+                    </button>
+
+                    <button
+                      (click)="eliminar(e.iId)"
+                      class="px-3 py-1.5 text-sm rounded bg-red-50 text-red-700 hover:bg-red-100 transition"
+                    >
+                      Eliminar
+                    </button>
+
+                  </div>
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+
+      </div>
+    }
+  }
+</div>

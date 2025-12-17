@@ -1,0 +1,105 @@
+<div class="max-w-3xl mx-auto space-y-4">
+
+  <h1 class="text-xl font-semibold">
+    {{ esEdicion() ? 'Editar campo' : 'Nuevo campo' }}
+  </h1>
+
+  @if (loading()) {
+  <div class="text-gray-500">Cargando...</div>
+  }
+
+  @else {
+
+  <form [formGroup]="form" class="space-y-4">
+
+    <!-- OBJETO -->
+    <div>
+      <label class="block text-sm font-medium">Objeto</label>
+      <select formControlName="iIdCatCampo" class="w-full border rounded px-3 py-2">
+        <option value="0">-- Selecciona --</option>
+        @for (o of objetos(); track o.iId) {
+        <option [value]="o.iId">
+          {{ o.cEtiquetaDefault }} ({{ o.cTipoDato }})
+        </option>
+        }
+      </select>
+    </div>
+
+    <!-- INFO DEL OBJETO -->
+    @if (objetoSeleccionado()) {
+    <div class="bg-gray-50 border rounded p-3 text-sm space-y-1">
+      <div><strong>Tipo:</strong> {{ objetoSeleccionado()?.cTipoDato }}</div>
+
+      @if (objetoSeleccionado()?.iLongitudMax) {
+      <div>
+        <strong>Longitud máxima:</strong>
+        {{ objetoSeleccionado()?.iLongitudMax }}
+      </div>
+      }
+
+      @if (objetoSeleccionado()?.cRegexValidacion) {
+      <div class="text-amber-700">
+        <strong>Validación:</strong> Regex aplicada
+      </div>
+      }
+
+      @if (objetoSeleccionado()?.cMimePermitidos) {
+      <div>
+        <strong>Formatos permitidos:</strong>
+        {{ objetoSeleccionado()?.cMimePermitidos }}
+      </div>
+      }
+
+      @if (objetoSeleccionado()?.iPesoMaxKB) {
+      <div>
+        <strong>Peso máximo:</strong>
+        {{ objetoSeleccionado()?.iPesoMaxKB }} KB
+      </div>
+      }
+    </div>
+    }
+
+    <!-- ETIQUETA -->
+    <div>
+      <label class="block text-sm font-medium">
+        Etiqueta (opcional)
+      </label>
+      <input type="text" formControlName="cEtiquetaOverride" class="w-full border rounded px-3 py-2" />
+    </div>
+
+    <!-- REQUERIDO -->
+    <div class="flex items-center gap-2">
+      <input type="checkbox" formControlName="lRequerido" />
+      <span>Campo requerido</span>
+    </div>
+
+    <!-- OPCIONES -->
+    <div>
+      <label class="block text-sm font-medium">
+        Opciones (select / radio)
+      </label>
+      <textarea rows="3" formControlName="cOpcionesCatalogo" class="w-full border rounded px-3 py-2"
+        placeholder="Ej: A|B|C" [disabled]="objetoSeleccionado()?.cTipoDato !== 'select'"></textarea>
+
+      @if (objetoSeleccionado()?.cTipoDato !== 'select') {
+      <div class="text-xs text-gray-400">
+        Solo aplica para campos tipo selección
+      </div>
+      }
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="flex gap-3">
+      <button type="button" (click)="guardar()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Guardar
+      </button>
+
+      <button type="button" (click)="cancelar()" class="px-4 py-2 bg-gray-300 rounded">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+  }
+
+</div>

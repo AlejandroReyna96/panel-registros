@@ -1,0 +1,55 @@
+<div class="max-w-xl mx-auto space-y-4">
+
+  <h1 class="text-xl font-semibold">
+    {{ esEdicion() ? 'Editar estado' : 'Nuevo estado' }}
+  </h1>
+
+  <form [formGroup]="form" class="space-y-4">
+
+    <!-- NOMBRE -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Nombre del estado
+      </label>
+      <input
+        formControlName="cNombre"
+        class="w-full border rounded px-3 py-2"
+        placeholder="Ej: En revisión"
+      />
+    </div>
+
+    <!-- DESCRIPCIÓN -->
+    <div>
+      <label class="block text-sm font-medium mb-1">
+        Descripción (opcional)
+      </label>
+      <textarea
+        rows="3"
+        formControlName="cDescripcion"
+        class="w-full border rounded px-3 py-2"
+        placeholder="Describe cuándo se usa este estado"
+      ></textarea>
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="flex gap-3 pt-4">
+      <button
+        type="button"
+        (click)="guardar()"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        [disabled]="loading()"
+      >
+        Guardar
+      </button>
+
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+      >
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</div>

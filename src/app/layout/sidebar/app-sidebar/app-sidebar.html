@@ -1,0 +1,45 @@
+<aside class="w-64 bg-gray-800 text-gray-200 flex-shrink-0 h-full">
+  <nav class="flex flex-col p-4 h-full overflow-y-auto space-y-6">
+
+    <!-- ===================== -->
+    <!-- CONFIGURACIÓN -->
+    <!-- ===================== -->
+    <div>
+      <div class="text-xs uppercase tracking-wider text-gray-400 mb-2">
+        Configuración
+      </div>
+
+      <!-- Punto de entrada -->
+      <a routerLink="/proceso" routerLinkActive="bg-gray-700 text-white"
+        class="block px-3 py-2 rounded hover:bg-gray-700 transition">
+        Procesos
+      </a>
+
+      <!-- Catálogos globales -->
+      <a routerLink="/objetos" routerLinkActive="bg-gray-700 text-white"
+        class="block px-3 py-2 rounded hover:bg-gray-700 transition">
+        Objetos (Campos)
+      </a>
+
+      <a routerLink="/cat-etapas" routerLinkActive="bg-gray-700 text-white"
+        class="block px-3 py-2 rounded hover:bg-gray-700 transition">
+        Catálogo de Etapas
+      </a>
+    </div>
+
+    <!-- ===================== -->
+    <!-- OPERACIÓN -->
+    <!-- ===================== -->
+    <div>
+      <div class="text-xs uppercase tracking-wider text-gray-400 mb-2">
+        Operación
+      </div>
+
+      <a routerLink="/registros/tipo/1" routerLinkActive="bg-gray-700 text-white"
+        class="block px-3 py-2 rounded hover:bg-gray-700 transition">
+        Solicitudes
+      </a>
+    </div>
+
+  </nav>
+</aside>

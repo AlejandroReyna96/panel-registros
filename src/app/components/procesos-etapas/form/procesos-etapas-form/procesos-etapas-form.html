@@ -1,0 +1,72 @@
+<div class="max-w-xl mx-auto space-y-6">
+
+  <!-- Header -->
+  <h1 class="text-2xl font-semibold text-gray-800">
+    Agregar Etapa al Proceso
+  </h1>
+
+  <div class="bg-white rounded shadow p-6 space-y-4">
+
+    <!-- Etapa -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Etapa
+      </label>
+      <select
+        [(ngModel)]="model().iIdEtapa"
+        class="w-full border rounded px-3 py-2"
+      >
+        <option value="0">-- Seleccione una etapa --</option>
+        @for (e of etapasCatalogo(); track e.iId) {
+          <option [value]="e.iId">
+            {{ e.cNombre }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- Flags -->
+    <div class="flex gap-6 pt-2">
+
+      <label class="flex items-center gap-2">
+        <input
+          type="checkbox"
+          [(ngModel)]="model().lEsInicial"
+        />
+        Etapa inicial
+      </label>
+
+      <label class="flex items-center gap-2">
+        <input
+          type="checkbox"
+          [(ngModel)]="model().lEsFinal"
+        />
+        Etapa final
+      </label>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end gap-2 pt-4">
+
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="px-4 py-2 rounded border text-gray-600 hover:bg-gray-100"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        (click)="guardar()"
+        [disabled]="loading() || !model().iIdEtapa"
+        class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+      >
+        Guardar
+      </button>
+
+    </div>
+
+  </div>
+</div>

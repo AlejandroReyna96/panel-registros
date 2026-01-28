@@ -4,7 +4,7 @@ export interface CampoProcesoCreateDTO {
 
   cEtiquetaOverride?: string;
   lRequerido: boolean;
-  cOpcionesCatalogo?: string;
+  cDataSourceClave?: string;
 
   iOrden?: number;
 }

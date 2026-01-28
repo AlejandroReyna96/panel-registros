@@ -1,75 +1,109 @@
-<div class="max-w-3xl mx-auto space-y-4">
+<div class="px-6 py-4 space-y-4">
 
-  <!-- HEADER -->
-  <div class="flex justify-between items-center">
-    <h1 class="text-xl font-semibold">
-      Campos de la sección
-    </h1>
+  <!-- BARRA SUPERIOR -->
+  <div class="flex items-center justify-between">
 
+    <!-- ATRÁS -->
+    <button (click)="volverSecciones()" class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800">
+      ← Secciones
+    </button>
+
+    <!-- ACCIÓN PRINCIPAL -->
     <button (click)="nuevo()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
       Nuevo campo
     </button>
+
   </div>
 
-  <!-- LOADING -->
-  @if (loading()) {
-  <div class="text-gray-500">Cargando campos...</div>
-  }
+  <!-- CONTENIDO CENTRADO -->
+  <div class="max-w-3xl mx-auto space-y-4">
 
-  <!-- LIST -->
-  @else {
+    <!-- TÍTULO -->
+    <h1 class="text-xl font-semibold text-gray-800">
+      Campos de la sección
+    </h1>
 
-  @if (campos().length === 0) {
-  <div class="text-gray-500 italic">
-    Esta sección aún no tiene campos.
-  </div>
-  }
-
-  @else {
-  <div cdkDropList (cdkDropListDropped)="drop($event)" class="space-y-2">
-    @for (c of campos(); track c.iId; let i = $index) {
-    <div cdkDrag class="bg-white border rounded px-4 py-3 shadow flex justify-between items-start gap-4">
-
-      <!-- INFO -->
-      <div class="flex-1">
-        <!-- TÍTULO -->
-        <div class="font-medium text-gray-800">
-          {{ i + 1 }}. {{ c.cEtiqueta }}
-        </div>
-
-        <!-- OBJETO -->
-        <div class="text-sm text-gray-500">
-          Objeto: <span class="font-semibold">{{ c.cNombreCampo }}</span>
-          · {{ getTipoVisual(c) }}
-          · {{ c.lRequerido ? 'Requerido' : 'Opcional' }}
-        </div>
-
-        <!-- RESTRICCIONES -->
-        @if (getRestricciones(c).length > 0) {
-        <div class="mt-1 text-xs text-gray-400">
-          <span *ngFor="let r of getRestricciones(c); let last = last">
-            {{ r }}<span *ngIf="!last"> · </span>
-          </span>
-        </div>
-        }
-      </div>
-
-      <!-- ACTIONS -->
-      <div class="flex gap-3 items-center">
-        <button (click)="editar(c.iId)" class="text-blue-600 text-sm hover:underline">
-          Editar
-        </button>
-
-        <button (click)="eliminar(c.iId)" class="text-red-600 text-sm hover:underline">
-          Eliminar
-        </button>
-
-        <span class="cursor-move text-gray-400 select-none">☰</span>
-      </div>
-
+    <!-- LOADING -->
+    @if (loading()) {
+    <div class="text-gray-500">
+      Cargando campos...
     </div>
     }
+
+    @else {
+
+    @if (campos().length === 0) {
+    <div class="text-gray-500 italic">
+      Esta sección aún no tiene campos.
+    </div>
+    }
+
+    @else {
+    <div cdkDropList (cdkDropListDropped)="drop($event)" class="space-y-2">
+      @for (c of campos(); track c.iId; let i = $index) {
+
+      <div cdkDrag class="bg-white border rounded px-4 py-3 shadow flex justify-between items-start gap-4">
+
+        <!-- INFO -->
+        <div class="flex-1">
+
+          <!-- TÍTULO -->
+          <div class="font-medium text-gray-800">
+            {{ i + 1 }}. {{ c.cEtiqueta }}
+          </div>
+
+          <!-- METADATA -->
+          <div class="text-sm text-gray-500">
+            Objeto:
+            <span class="font-semibold">
+              {{ c.cNombreCampo }}
+            </span>
+            · {{ getTipoVisual(c) }}
+            · {{ c.lRequerido ? 'Requerido' : 'Opcional' }}
+
+            @if (c.cDataSourceClave) {
+            · <span class="text-indigo-600">
+              Catálogo: {{ c.cDataSourceClave }}
+            </span>
+            }
+          </div>
+
+
+          <!-- RESTRICCIONES -->
+          @if (getRestricciones(c).length > 0) {
+          <div class="mt-1 text-xs text-gray-400">
+            @for (
+            r of getRestricciones(c);
+            let j = $index;
+            track j
+            ) {
+            <span>
+              {{ r }}@if (j < getRestricciones(c).length - 1) { · } </span>
+                }
+          </div>
+          }
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="flex gap-3 items-center">
+
+          <button (click)="editar(c.iId)" class="text-blue-600 text-sm hover:underline">
+            Editar
+          </button>
+
+          <button (click)="eliminar(c.iId)" class="text-red-600 text-sm hover:underline">
+            Eliminar
+          </button>
+
+          <!-- DRAG HANDLE -->
+          <span cdkDragHandle class="cursor-move text-gray-400 select-none" title="Arrastrar para reordenar">
+            ☰
+          </span>
+        </div>
+      </div>
+      }
+    </div>
+    }
+    }
   </div>
-  }
-  }
 </div>

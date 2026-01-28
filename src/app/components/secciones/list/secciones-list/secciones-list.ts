@@ -71,7 +71,10 @@ export class SeccionesList {
   }
 
   irCampos(idSeccion: number) {
-    this.router.navigate(['/campos', idSeccion]);
+    this.router.navigate(
+      ['/campos', idSeccion],
+      { queryParams: { idProceso: this.idProceso } }
+    );
   }
 
   async eliminar(id: number) {
@@ -79,5 +82,9 @@ export class SeccionesList {
 
     await firstValueFrom(this.service.eliminar(id));
     await this.cargar();
+  }
+
+  volverProcesos() {
+    this.router.navigate(['/proceso']);
   }
 }

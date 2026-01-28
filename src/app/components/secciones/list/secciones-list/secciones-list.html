@@ -1,10 +1,13 @@
-<div class="max-w-3xl mx-auto space-y-4">
+<div class="px-6 py-4 space-y-4">
 
-  <!-- HEADER -->
-  <div class="flex justify-between items-center">
-    <h1 class="text-xl font-semibold text-gray-800">
-      Secciones del Proceso
-    </h1>
+  <!-- BARRA SUPERIOR -->
+  <div class="flex items-center justify-between">
+    <button
+      (click)="volverProcesos()"
+      class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+    >
+      ← Procesos
+    </button>
 
     <button
       (click)="nuevo()"
@@ -14,69 +17,74 @@
     </button>
   </div>
 
-  <!-- LISTA -->
-  <div
-    cdkDropList
-    [cdkDropListData]="secciones()"
-    (cdkDropListDropped)="drop($event)"
-    class="space-y-2"
-  >
+  <!-- CONTENIDO CENTRADO -->
+  <div class="max-w-3xl mx-auto space-y-4">
 
-    @for (s of secciones(); track s.iId; let i = $index) {
+    <h1 class="text-xl font-semibold text-gray-800">
+      Secciones del Proceso
+    </h1>
 
-      <div
-        cdkDrag
-        class="bg-white border rounded px-4 py-3 shadow-sm flex justify-between items-center hover:bg-gray-50"
-      >
+    <!-- LISTA -->
+    <div
+      cdkDropList
+      [cdkDropListData]="secciones()"
+      (cdkDropListDropped)="drop($event)"
+      class="space-y-2"
+    >
 
-        <!-- INFO -->
-        <div>
-          <div class="font-medium text-gray-800">
-            {{ i + 1 }}. {{ s.cTitulo }}
+      @for (s of secciones(); track s.iId; let i = $index) {
+
+        <div
+          cdkDrag
+          class="bg-white border rounded px-4 py-3 shadow-sm flex justify-between items-center hover:bg-gray-50"
+        >
+
+          <!-- INFO -->
+          <div>
+            <div class="font-medium text-gray-800">
+              {{ i + 1 }}. {{ s.cTitulo }}
+            </div>
+            <div class="text-sm text-gray-500">
+              {{ s.cDescripcion }}
+            </div>
           </div>
-          <div class="text-sm text-gray-500">
-            {{ s.cDescripcion }}
+
+          <!-- ACCIONES -->
+          <div class="flex gap-3 items-center">
+
+            <button
+              (click)="editar(s.iId)"
+              class="text-blue-600 text-sm hover:underline"
+            >
+              Editar
+            </button>
+
+            <button
+              (click)="irCampos(s.iId)"
+              class="text-indigo-600 text-sm hover:underline"
+            >
+              Campos
+            </button>
+
+            <button
+              (click)="eliminar(s.iId)"
+              class="text-red-600 text-sm hover:underline"
+            >
+              Eliminar
+            </button>
+
+            <span
+              cdkDragHandle
+              class="text-gray-400 cursor-move select-none"
+              title="Arrastrar para reordenar"
+            >
+              ☰
+            </span>
+
           </div>
         </div>
-
-        <!-- ACCIONES -->
-        <div class="flex gap-3 items-center">
-
-          <button
-            (click)="editar(s.iId)"
-            class="text-blue-600 text-sm hover:underline"
-          >
-            Editar
-          </button>
-
-          <button
-            (click)="irCampos(s.iId)"
-            class="text-indigo-600 text-sm hover:underline"
-          >
-            Campos
-          </button>
-
-          <button
-            (click)="eliminar(s.iId)"
-            class="text-red-600 text-sm hover:underline"
-          >
-            Eliminar
-          </button>
-
-          <!-- DRAG HANDLE -->
-          <span
-            cdkDragHandle
-            class="text-gray-400 cursor-move select-none"
-            title="Arrastrar para reordenar"
-          >
-            ☰
-          </span>
-
-        </div>
-
-      </div>
-    }
-
+      }
+    </div>
   </div>
 
 </div>

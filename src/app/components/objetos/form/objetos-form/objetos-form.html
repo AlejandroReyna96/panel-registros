@@ -6,16 +6,18 @@
 
   <form [formGroup]="form" class="space-y-4">
 
+    @let tipo = form.get('cTipoDato')?.value;
+
     <!-- Nombre interno -->
     <div>
       <label class="block text-sm font-medium mb-1">
         Nombre interno
       </label>
-      <input
-        formControlName="cNombreCampo"
-        class="w-full border rounded px-3 py-2"
-        placeholder="CURP, RFC, CORREO"
-      />
+      <input formControlName="cNombreCampo" class="w-full border rounded px-3 py-2"
+        placeholder="curp, correo, archivo_identidad" />
+      <div class="text-xs text-gray-500 mt-1">
+        Identificador interno (sin espacios, sin acentos).
+      </div>
     </div>
 
     <!-- Etiqueta -->
@@ -23,11 +25,11 @@
       <label class="block text-sm font-medium mb-1">
         Etiqueta sugerida
       </label>
-      <input
-        formControlName="cEtiquetaDefault"
-        class="w-full border rounded px-3 py-2"
-        placeholder="Clave Única de Registro de Población"
-      />
+      <input formControlName="cEtiquetaDefault" class="w-full border rounded px-3 py-2"
+        placeholder="Clave Única de Registro de Población" />
+      <div class="text-xs text-gray-500 mt-1">
+        Texto visible para el ciudadano.
+      </div>
     </div>
 
     <!-- Tipo de dato -->
@@ -35,83 +37,88 @@
       <label class="block text-sm font-medium mb-1">
         Tipo de dato
       </label>
-      <select
-        formControlName="cTipoDato"
-        class="w-full border rounded px-3 py-2"
-      >
+      <select formControlName="cTipoDato" class="w-full border rounded px-3 py-2">
         <option value="">Seleccione…</option>
         <option value="text">Texto</option>
         <option value="number">Número</option>
         <option value="email">Correo</option>
         <option value="file">Archivo</option>
-        <option value="select">Lista</option>
+        <option value="select">Lista desplegable</option>
+        <option value="radio">Radios</option>
+        <option value="checkbox">Checkbox</option>
         <option value="date">Fecha</option>
       </select>
+
+      <div class="text-xs text-gray-500 mt-1">
+        Este valor define cómo se renderizará el campo en el formulario público.
+      </div>
     </div>
 
     <!-- Longitud máxima -->
+    @if (tipo === 'text') {
     <div>
       <label class="block text-sm font-medium mb-1">
         Longitud máxima
       </label>
-      <input
-        type="number"
-        formControlName="iLongitudMax"
-        class="w-full border rounded px-3 py-2"
-      />
+      <input type="number" formControlName="iLongitudMax" class="w-full border rounded px-3 py-2" />
+      <div class="text-xs text-gray-500 mt-1">
+        Aplica solo para campos de texto.
+      </div>
     </div>
+    }
 
     <!-- Regex -->
+    @if (tipo === 'text') {
     <div>
       <label class="block text-sm font-medium mb-1">
         Regex de validación
       </label>
-      <input
-        formControlName="cRegexValidacion"
-        class="w-full border rounded px-3 py-2"
-        placeholder="^[A-Z]{4}[0-9]{6}[A-Z0-9]{8}$"
-      />
+      <input formControlName="cRegexValidacion" class="w-full border rounded px-3 py-2"
+        placeholder="^[A-Z]{4}[0-9]{6}[A-Z0-9]{8}$" />
+      <div class="text-xs text-gray-500 mt-1">
+        Validación avanzada (opcional).
+      </div>
     </div>
+    }
 
     <!-- MIME -->
+    @if (tipo === 'file') {
     <div>
       <label class="block text-sm font-medium mb-1">
         MIME permitidos
       </label>
-      <input
-        formControlName="cMimePermitidos"
-        class="w-full border rounded px-3 py-2"
-        placeholder="application/pdf,image/jpeg"
-      />
+      <input formControlName="cMimePermitidos" class="w-full border rounded px-3 py-2"
+        placeholder="application/pdf,image/jpeg" />
+      <div class="text-xs text-gray-500 mt-1">
+        Lista separada por comas.
+      </div>
     </div>
+    }
 
     <!-- Peso -->
+    @if (tipo === 'file') {
     <div>
       <label class="block text-sm font-medium mb-1">
         Peso máximo (KB)
       </label>
-      <input
-        type="number"
-        formControlName="iPesoMaxKB"
-        class="w-full border rounded px-3 py-2"
-      />
+      <input type="number" formControlName="iPesoMaxKB" class="w-full border rounded px-3 py-2" />
     </div>
+    }
+
+    <!-- Mensaje contextual -->
+    @if (tipo === 'select' || tipo === 'radio' || tipo === 'checkbox') {
+    <div class="rounded border bg-blue-50 p-3 text-sm text-blue-800">
+      Las opciones de este campo se definirán al asignarlo a un proceso.
+    </div>
+    }
 
     <!-- ACTIONS -->
     <div class="flex gap-3 pt-4">
-      <button
-        type="button"
-        (click)="guardar()"
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
+      <button type="button" (click)="guardar()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
         Guardar
       </button>
 
-      <button
-        type="button"
-        (click)="cancelar()"
-        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-      >
+      <button type="button" (click)="cancelar()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
         Cancelar
       </button>
     </div>

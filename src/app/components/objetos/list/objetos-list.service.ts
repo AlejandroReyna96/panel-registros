@@ -7,7 +7,7 @@ import { CatCampoDTO } from '../../../compartidos/DTOs/cat-campos/CatCampoDTO';
   providedIn: 'root',
 })
 export class ObjetosListService {
-  
+
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiURL;
 

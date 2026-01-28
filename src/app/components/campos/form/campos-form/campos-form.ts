@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CamposFormService } from '../campos-form.service';
 import { CatCampoDTO } from '../../../../compartidos/DTOs/cat-campos/CatCampoDTO';
+import { DataSourceDTO } from '../../../../compartidos/DTOs/DataSources/DataSourceDTO';
 
 @Component({
   selector: 'app-campos-form',
@@ -25,6 +26,8 @@ export class CamposForm {
   readonly loading = signal(true);
   readonly objetos = signal<CatCampoDTO[]>([]);
   readonly objetoSeleccionado = signal<CatCampoDTO | null>(null);
+  readonly dataSources = signal<DataSourceDTO[]>([]);
+
 
   readonly idSeccion = Number(this.route.snapshot.paramMap.get('idSeccion'));
   readonly idCampo = Number(this.route.snapshot.paramMap.get('idCampo'));
@@ -37,7 +40,7 @@ export class CamposForm {
     iIdCatCampo: [0, Validators.required],
     cEtiquetaOverride: [''],
     lRequerido: [false],
-    cOpcionesCatalogo: [''],
+    cDataSourceClave: [''],
     iOrden: [1],
   });
 
@@ -53,47 +56,37 @@ export class CamposForm {
 
     try {
       // 1. Cargar catálogo de objetos
-      const objetos = await firstValueFrom(
-        this.service.listarObjetos()
-      );
+      const objetos = await firstValueFrom(this.service.listarObjetos());
       this.objetos.set(objetos);
 
-      // 2. Detectar cambio de objeto
-      this.form.get('iIdCatCampo')!.valueChanges.subscribe(id => {
-        const obj = this.objetos().find(o => o.iId === id) || null;
-        this.objetoSeleccionado.set(obj);
-
-        // Si no es select, limpia opciones
-        if (obj && obj.cTipoDato !== 'select') {
-          this.form.patchValue(
-            { cOpcionesCatalogo: '' },
-            { emitEvent: false }
-          );
-        }
+      this.form.get('iIdCatCampo')!.valueChanges.subscribe(value => {
+        this.actualizarObjetoSeleccionado(Number(value));
       });
 
-      // 3. Si es edición, cargar campo
+      const dataSources = await firstValueFrom(this.service.listarDataSources());
+      this.dataSources.set(dataSources);
+
+      // 2. Si es edición, cargar campo
       if (this.esEdicion()) {
-        const campo = await firstValueFrom(
-          this.service.obtener(this.idCampo)
-        );
+        const campo = await firstValueFrom(this.service.obtener(this.idCampo));
 
         this.form.patchValue({
           iIdCatCampo: campo.iIdCatCampo,
           cEtiquetaOverride: campo.cEtiqueta,
           lRequerido: campo.lRequerido,
-          cOpcionesCatalogo: campo.cOpcionesCatalogo ?? '',
+          cDataSourceClave: campo.cDataSourceClave ?? '',
           iOrden: campo.iOrden,
         });
 
-        this.objetoSeleccionado.set(
-          objetos.find(o => o.iId === campo.iIdCatCampo) || null
-        );
+        this.actualizarObjetoSeleccionado(campo.iIdCatCampo);
       }
-
     } finally {
       this.loading.set(false);
     }
+  }
+
+  requiereDataSource(tipo?: string): boolean {
+    return ['select', 'radio', 'checkbox'].includes(tipo ?? '');
   }
 
   // ===============================
@@ -115,18 +108,14 @@ export class CamposForm {
         iIdCatCampo: raw.iIdCatCampo,
         cEtiquetaOverride: raw.cEtiquetaOverride || undefined,
         lRequerido: raw.lRequerido,
-        cOpcionesCatalogo: raw.cOpcionesCatalogo || undefined,
+        cDataSourceClave: raw.cDataSourceClave || undefined,
         iOrden: raw.iOrden,
       };
 
       if (this.esEdicion()) {
-        await firstValueFrom(
-          this.service.actualizar(this.idCampo, dto)
-        );
+        await firstValueFrom(this.service.actualizar(this.idCampo, dto));
       } else {
-        await firstValueFrom(
-          this.service.crear(dto)
-        );
+        await firstValueFrom(this.service.crear(dto));
       }
 
       this.router.navigate(['/campos', this.idSeccion]);
@@ -139,4 +128,14 @@ export class CamposForm {
   cancelar() {
     this.router.navigate(['/campos', this.idSeccion]);
   }
+
+  private actualizarObjetoSeleccionado(idCatCampo: number) {
+    const obj = this.objetos().find(o => o.iId === idCatCampo) || null;
+    this.objetoSeleccionado.set(obj);
+
+    if (!this.requiereDataSource(obj?.cTipoDato)) {
+      this.form.patchValue({ cDataSourceClave: '' }, { emitEvent: false });
+    }
+  }
+
 }

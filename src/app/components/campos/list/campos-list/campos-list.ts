@@ -25,6 +25,10 @@ export class CamposList {
     this.route.snapshot.paramMap.get('idSeccion')
   );
 
+  readonly idProceso = Number(
+    this.route.snapshot.queryParamMap.get('idProceso')
+  );
+
   constructor() {
     this.cargar();
   }
@@ -72,7 +76,8 @@ export class CamposList {
     if (c.cTipoDato === 'file') return 'Archivo';
     if (c.cTipoDato === 'text') return 'Texto';
     if (c.cTipoDato === 'number') return 'Número';
-    if (c.cTipoDato === 'select') return 'Selección';
+    if (c.cTipoDato === 'select' && c.cDataSourceClave)
+      return 'Selección (catálogo)';
     return c.cTipoDato;
   }
 
@@ -85,5 +90,9 @@ export class CamposList {
     if (c.cRegexValidacion) r.push(`Validación especial`);
 
     return r;
+  }
+
+  volverSecciones() {
+    this.router.navigate(['/secciones', this.idProceso]);
   }
 }

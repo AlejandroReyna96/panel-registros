@@ -20,7 +20,6 @@ export class ObjetosForm {
 
   readonly id = Number(this.route.snapshot.paramMap.get('id'));
   readonly esEdicion = computed(() => !!this.id);
-
   readonly loading = signal(false);
 
   // ===============================
@@ -38,6 +37,24 @@ export class ObjetosForm {
   });
 
   constructor() {
+
+
+    this.form.get('cTipoDato')!.valueChanges.subscribe(tipo => {
+      if (tipo !== 'text') {
+        this.form.patchValue({
+          iLongitudMax: null,
+          cRegexValidacion: '',
+        }, { emitEvent: false });
+      }
+
+      if (tipo !== 'file') {
+        this.form.patchValue({
+          cMimePermitidos: '',
+          iPesoMaxKB: null,
+        }, { emitEvent: false });
+      }
+    });
+
     if (this.esEdicion()) {
       this.cargar();
     }
@@ -69,7 +86,6 @@ export class ObjetosForm {
     try {
       const raw = this.form.getRawValue();
 
-      // 🔹 NORMALIZACIÓN null → undefined
       const dto = {
         ...raw,
         iLongitudMax: raw.iLongitudMax ?? undefined,

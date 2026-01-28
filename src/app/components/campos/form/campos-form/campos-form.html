@@ -73,20 +73,31 @@
       <span>Campo requerido</span>
     </div>
 
-    <!-- OPCIONES -->
+    <!-- DATA SOURCE -->
+    @if (requiereDataSource(objetoSeleccionado()?.cTipoDato)) {
     <div>
       <label class="block text-sm font-medium">
-        Opciones (select / radio)
+        Catálogo / Fuente de datos
       </label>
-      <textarea rows="3" formControlName="cOpcionesCatalogo" class="w-full border rounded px-3 py-2"
-        placeholder="Ej: A|B|C" [disabled]="objetoSeleccionado()?.cTipoDato !== 'select'"></textarea>
 
-      @if (objetoSeleccionado()?.cTipoDato !== 'select') {
-      <div class="text-xs text-gray-400">
-        Solo aplica para campos tipo selección
+      <select formControlName="cDataSourceClave" class="w-full border rounded px-3 py-2">
+        <option value="">-- Selecciona un catálogo --</option>
+
+        @for (ds of dataSources(); track ds.cClave) {
+        <option [value]="ds.cClave">
+          {{ ds.cNombre }}
+        </option>
+        }
+      </select>
+
+      <div class="text-xs text-gray-500 mt-1">
+        Las opciones del campo se cargarán desde este catálogo
       </div>
-      }
     </div>
+    }
+
+
+
 
     <!-- ACCIONES -->
     <div class="flex gap-3">

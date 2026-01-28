@@ -13,7 +13,7 @@ export interface CampoProcesoDTO {
   iPesoMaxKB?: number;
 
   lRequerido: boolean;
-  cOpcionesCatalogo?: string;
+  cDataSourceClave?: string;
 
   iOrden: number;
   lActivo: boolean;

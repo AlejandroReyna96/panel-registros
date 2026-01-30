@@ -62,8 +62,12 @@ export class CamposList {
   }
 
   editar(idCampo: number) {
-    this.router.navigate(['/campos', this.idSeccion, idCampo]);
+    this.router.navigate(
+      ['/campos', this.idSeccion, idCampo],
+      { queryParams: { idProceso: this.idProceso } }
+    );
   }
+
 
   async eliminar(idCampo: number) {
     if (!confirm('¿Eliminar este campo de la sección?')) return;

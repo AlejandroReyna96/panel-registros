@@ -1,20 +1,25 @@
-<div class="max-w-3xl mx-auto space-y-4">
+<div class="max-w-4xl mx-auto space-y-6">
 
+  <!-- TÍTULO -->
   <h1 class="text-xl font-semibold">
     {{ esEdicion() ? 'Editar campo' : 'Nuevo campo' }}
   </h1>
 
   @if (loading()) {
-  <div class="text-gray-500">Cargando...</div>
+  <div class="text-gray-500">Cargando…</div>
   }
 
   @else {
 
-  <form [formGroup]="form" class="space-y-4">
+  <form [formGroup]="form" class="space-y-6">
+
+    <!-- =========================
+         DEFINICIÓN DEL CAMPO
+         ========================= -->
 
     <!-- OBJETO -->
     <div>
-      <label class="block text-sm font-medium">Objeto</label>
+      <label class="block text-sm font-medium mb-1">Objeto</label>
       <select formControlName="iIdCatCampo" class="w-full border rounded px-3 py-2">
         <option value="0">-- Selecciona --</option>
         @for (o of objetos(); track o.iId) {
@@ -61,7 +66,7 @@
 
     <!-- ETIQUETA -->
     <div>
-      <label class="block text-sm font-medium">
+      <label class="block text-sm font-medium mb-1">
         Etiqueta (opcional)
       </label>
       <input type="text" formControlName="cEtiquetaOverride" class="w-full border rounded px-3 py-2" />
@@ -76,13 +81,12 @@
     <!-- DATA SOURCE -->
     @if (requiereDataSource(objetoSeleccionado()?.cTipoDato)) {
     <div>
-      <label class="block text-sm font-medium">
+      <label class="block text-sm font-medium mb-1">
         Catálogo / Fuente de datos
       </label>
 
       <select formControlName="cDataSourceClave" class="w-full border rounded px-3 py-2">
         <option value="">-- Selecciona un catálogo --</option>
-
         @for (ds of dataSources(); track ds.cClave) {
         <option [value]="ds.cClave">
           {{ ds.cNombre }}
@@ -96,11 +100,95 @@
     </div>
     }
 
+    <!-- =========================
+         REGLAS DE VISIBILIDAD
+         ========================= -->
+    @if (esEdicion()) {
+
+    <hr />
+
+    <div class="space-y-4">
+
+      <h3 class="text-sm font-semibold">
+        Reglas de visibilidad
+      </h3>
+
+      <p class="text-xs text-gray-500">
+        Este campo solo se mostrará cuando se cumplan las siguientes condiciones
+      </p>
+
+      <!-- NUEVA REGLA -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+
+        <!-- CAMPO CONTROLADOR -->
+        <div>
+          <label class="block text-xs mb-1">Campo</label>
+
+          <select class="w-full border rounded px-2 py-1" [value]="reglaDraft().iIdCampoControlador"
+            (change)="onCampoControladorChange($event)">
+            <option value="0">-- Selecciona --</option>
+
+            @for (c of camposProceso(); track c.iId) {
+            <option [value]="c.iId">
+              {{ c.cEtiqueta }}
+            </option>
+            }
+          </select>
+        </div>
+
+        <!-- OPERADOR -->
+        <div>
+          <label class="block text-xs mb-1">Condición</label>
+          <select class="w-full border rounded px-2 py-1" (change)="onOperadorChange($event)">
+            <option value="in">es igual a</option>
+            <option value="not_in">no es igual a</option>
+          </select>
+        </div>
 
 
+        <!-- VALORES -->
+        <div>
+          <label class="block text-xs mb-1">Valor(es)</label>
+          <input type="text" class="w-full border rounded px-2 py-1" placeholder="Ej: Reposición, Constancia"
+            (change)="onValoresChange($event)" />
+        </div>
 
-    <!-- ACCIONES -->
-    <div class="flex gap-3">
+        <!-- AGREGAR -->
+        <div>
+          <button type="button" class="w-full px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700"
+            (click)="agregarRegla()">
+            Agregar
+          </button>
+        </div>
+      </div>
+
+      <!-- LISTADO DE REGLAS -->
+      @if (reglasVisibilidad().length > 0) {
+      <div class="border rounded divide-y">
+        @for (r of reglasVisibilidad(); track r.iId) {
+        <div class="flex justify-between items-center px-3 py-2 text-sm">
+          <div>
+            <strong>
+              {{ getEtiquetaCampo(r.iIdCampoControlador) }}
+            </strong>
+            {{ r.cOperador === 'in' ? 'es' : 'no es' }}
+            {{ r.valores.join(', ') }}
+          </div>
+
+          <button type="button" class="text-red-600 hover:underline" (click)="eliminarRegla(r.iId)">
+            Eliminar
+          </button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }
+
+    <!-- =========================
+         ACCIONES
+         ========================= -->
+    <div class="flex gap-3 pt-4">
       <button type="button" (click)="guardar()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
         Guardar
       </button>

@@ -31,11 +31,11 @@ export class CamposFormService {
   }
 
   crear(dto: CampoProcesoCreateDTO) {
-    return this.http.post(`${this.baseUrl}/CamposProceso`, dto);
+    return this.http.post<CampoProcesoDTO>(`${this.baseUrl}/CamposProceso`, dto);
   }
 
   actualizar(id: number, dto: CampoProcesoUpdateDTO) {
-    return this.http.put(`${this.baseUrl}/CamposProceso/${id}`, dto);
+    return this.http.put<CampoProcesoDTO>(`${this.baseUrl}/CamposProceso/${id}`, dto);
   }
 
   // ======================================
@@ -47,5 +47,34 @@ export class CamposFormService {
 
   obtenerDataSourceItems(clave: string) {
     return this.http.get<DataSourceItemDTO[]>(`${this.baseUrl}/data-sources/${clave}/items`);
+  }
+
+  // ======================
+  // REGLAS VISIBILIDAD
+  // ======================
+  listarReglasCampo(idCampoProceso: number) {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/campos-proceso-reglas/campo/${idCampoProceso}`
+    );
+  }
+
+  crearRegla(dto: any) {
+    return this.http.post(
+      `${this.baseUrl}/campos-proceso-reglas`,
+      dto
+    );
+  }
+
+  eliminarRegla(id: number) {
+    return this.http.delete(
+      `${this.baseUrl}/campos-proceso-reglas/${id}`
+    );
+  }
+
+  // ======================================
+  // CAMPOS_PROCESO (LISTAR POR PROCESO)
+  // ======================================
+  listarCamposProceso(idProceso: number) {
+    return this.http.get<CampoProcesoDTO[]>(`${this.baseUrl}/CamposProceso/proceso/${idProceso}`);
   }
 }
